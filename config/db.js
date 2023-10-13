@@ -2,10 +2,10 @@ require("dotenv").config();
 const mysql = require("mysql");
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
+  host: process.env.MYSQL_DATABASE,
+  user: process.env.MYSQL_USER,
+  database: process.env.MYSQL_NAME,
+  password: process.env.MYSQL_PASSWORD,
 });
 
 const sql = "SELECT * FROM NewTable";
