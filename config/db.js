@@ -6,7 +6,7 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_USER,
   database: process.env.MYSQL_NAME,
   password: process.env.MYSQL_PASSWORD,
-  port: process.env.MYSQL_PORT,
+  port: "/var/run/mysqld/mysqld.sock",
 });
 
 // /tmp/mysql.sock
