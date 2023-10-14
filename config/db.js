@@ -6,8 +6,10 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_USER,
   database: process.env.MYSQL_NAME,
   password: process.env.MYSQL_PASSWORD,
+  port: process.env.MYSQL_PORT,
 });
 
+// /tmp/mysql.sock
 const sql = "SELECT * FROM NewTable";
 
 pool.query(sql, function (err, result) {
