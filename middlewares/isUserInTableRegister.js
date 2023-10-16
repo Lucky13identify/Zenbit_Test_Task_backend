@@ -8,10 +8,9 @@ const isUserInTableRegister = async (req, res, next) => {
     [body.email],
     (error, results, fields) => {
       if (error) {
-        console.error("Ошибка при выполнении запроса:", error);
-        return;
+        throw error;
       } else {
-        console.log("Email уже существует в таблице.");
+        console.log("Email уже есть в таблице");
       }
 
       const count = results[0].count;

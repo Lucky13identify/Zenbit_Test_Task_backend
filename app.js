@@ -5,6 +5,7 @@ require("dotenv").config();
 
 // import of routes
 const authRouter = require("./routes/api/auth-routes");
+const dealsRouter = require("./routes/api/deals-routes");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/api/deals", dealsRouter);
 
 // other middlewares
 app.use((req, res) => {

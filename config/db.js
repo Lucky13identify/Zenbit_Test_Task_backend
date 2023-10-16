@@ -6,13 +6,17 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_USER,
   database: process.env.MYSQL_NAME,
   password: process.env.MYSQL_PASSWORD,
-  port: "/tmp/mysql.sock    ",
 });
 
-// /tmp/mysql.sock
-const sql = "SELECT * FROM NewTable";
+const sqlUsers = "SELECT * FROM NewTable";
+const sqlDeals = "SELECT * FROM dealsInfo";
 
-pool.query(sql, function (err, result) {
+pool.query(sqlUsers, function (err, usersResult) {
+  if (err) {
+    throw err;
+  }
+});
+pool.query(sqlDeals, function (err, dealsResult) {
   if (err) {
     throw err;
   }
