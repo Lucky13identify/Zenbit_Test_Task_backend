@@ -1,16 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const ctrl = require("../../controllers/auth-controller");
-const {
-  isUserInTableRegister,
-  isUserInTableLogin,
-} = require("../../middlewares");
+// const { isUserInTableLogin } = require("../../middlewares");
 
 // SignUp
-router.post("/register", isUserInTableRegister, ctrl.register);
+router.post("/register", ctrl.register);
 
 // SignIn
-router.post("/login", isUserInTableLogin, ctrl.login);
+router.post("/login", ctrl.login);
 
 // Logout
 router.post("/logout", ctrl.logout);

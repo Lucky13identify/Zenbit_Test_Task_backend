@@ -1,8 +1,7 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { ctrlWrapper } = require("../helpers");
 
 const { JWT_SECRET } = process.env;
 
@@ -10,39 +9,34 @@ const { JWT_SECRET } = process.env;
 
 const login = (req, res) => {
   const { email, password } = req.body;
+  const sqlUser = `SELECT * FROM NewTable WHERE email = '${email}' AND password = '${password}'`;
 
-  db.query(
-    "SELECT * FROM NewTable WHERE email = ?",
-    [email],
-    (error, results, fields) => {
-      if (error) {
-        console.error("Ошибка при выполнении запроса:", error);
-
-        return;
-      }
-
-      if (results.length > 0) {
-        const user = results[0];
-        const passwordCompare = bcrypt.compare(password, user.password);
-        if (!passwordCompare) {
-          throw HttpError(401, "Email or password invalid");
-        }
-
-        const payload = {
-          id: user.id,
-        };
-
-        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-        res.json({
-          email,
-          token,
-        });
-        console.log("Данные пользователя:", user.password);
-      } else {
-        console.log("Пользователь не найден");
-      }
+  db.query(sqlUser, async function (err, userResult) {
+    if (err) {
+      throw err;
     }
-  );
+
+    if (userResult.length !== 0) {
+      const result = userResult[0];
+
+      const passwordCompare = password === result.password;
+
+      if (!passwordCompare) {
+        return res.status(401).json({ error: "Email or password invalid" });
+      }
+      const payload = {
+        id: result.id,
+      };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+      res.json({
+        email,
+        token,
+      });
+    } else {
+      return res.status(401).json({ error: "Email or password invalid" });
+    }
+  });
 };
 
 // Register controller
@@ -50,18 +44,33 @@ const login = (req, res) => {
 const register = async (req, res) => {
   const { email, password } = req.body;
   const payload = { email };
+
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
+  const sqlUser = `SELECT * FROM NewTable WHERE email = '${email}'`;
   const sql = `INSERT INTO NewTable (email, password, token) VALUES ('${email}', '${password}', '${token}')`;
+
   try {
-    const result = await db.query(sql);
+    const resultUser = await db.query(sqlUser, function (err, userResult) {
+      if (err) {
+        throw err;
+      }
 
-    res.json({
-      email,
-      password,
-      token,
+      if (userResult.length !== 0) {
+        return res
+          .status(409)
+          .json({ error: "User with this email address already exists" });
+      } else {
+        db.query(sql);
+
+        res.json({
+          email,
+          password,
+          token,
+        });
+      }
     });
-
-    return result;
+    return resultUser;
   } catch (error) {
     console.error(error);
     throw error;
