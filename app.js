@@ -16,6 +16,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/", dealsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/deals", dealsRouter);
 
