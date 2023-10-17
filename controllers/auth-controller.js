@@ -51,7 +51,7 @@ const register = async (req, res) => {
   const sql = `INSERT INTO NewTable (email, password, token) VALUES ('${email}', '${password}', '${token}')`;
 
   try {
-    db.query(sqlUser, function (err, userResult) {
+    const resultUser = await db.query(sqlUser, function (err, userResult) {
       if (err) {
         throw err;
       }
@@ -61,19 +61,16 @@ const register = async (req, res) => {
           .status(409)
           .json({ error: "User with this email address already exists" });
       } else {
-        db.query(sql, function (err, userResult) {
-          if (err) {
-            throw err;
-          }
+        db.query(sql);
 
-          res.json({
-            email: userResult.email,
-            password: userResult.password,
-            token,
-          });
+        res.json({
+          email,
+          password,
+          token,
         });
       }
     });
+    return resultUser;
   } catch (error) {
     console.error(error);
     throw error;
