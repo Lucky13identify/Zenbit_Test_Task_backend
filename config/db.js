@@ -6,6 +6,9 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_ADDON_USER,
   database: process.env.MYSQL_ADDON_DB,
   password: process.env.MYSQL_ADDON_PASSWORD,
+  waitForConnections: true,
+  connectionLimit: 2,
+  queueLimit: 0,
 });
 
 const sqlUsers = "SELECT * FROM NewTable";
