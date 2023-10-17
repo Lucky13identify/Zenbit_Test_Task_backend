@@ -19,6 +19,7 @@ pool.query(sqlUsers, function (err, usersResult) {
     throw err;
   }
 });
+
 pool.query(sqlDeals, function (err, dealsResult) {
   if (err) {
     throw err;
