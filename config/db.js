@@ -7,8 +7,8 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_ADDON_DB,
   password: process.env.MYSQL_ADDON_PASSWORD,
   waitForConnections: true,
-  connectionLimit: 100,
-  queueLimit: 0,
+  connectionLimit: 1000000,
+  queueLimit: 100000,
 });
 
 const sqlUsers = "SELECT * FROM NewTable";
