@@ -8,7 +8,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon cross-env NODE_ENV=production node ./server.js",
+    "start": "node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
@@ -49,4 +49,3 @@
     "supertest": "^6.3.3"
   }
 }
-
